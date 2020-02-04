@@ -14,7 +14,7 @@ const {
   getPreset,
   executePromise,
   br,
-
+  sleep,
   getCurrentGitBranch,
   getAccessToken,
   publish
@@ -22,10 +22,76 @@ const {
 
 
 module.exports = async function () {
-  const version = getCurrentVersion()
-  const vVersion = `v${version}`
+  let version = getCurrentVersion()
+  let vVersion = `v${version}`
+  let prerelease = false
+  let draft = false
+  let targetCommitish = 'master'
 
-  // const ver = version.split('.').join('')
+  /**
+   * Change version
+   */
+  const isAnotherVersion = await inquirer.prompt([
+    {
+      name: 'version',
+      type: 'input',
+      message: `Type a version, or press enter for current (${version})`
+    }
+  ])
+  if (isAnotherVersion.version) {
+    version = isAnotherVersion.version
+    vVersion = `v${version}`
+  }
+
+  /**
+   * Draft, Pre-release
+   * @source https://developer.github.com/v3/repos/releases/#input
+   */
+  const publishOptions = await inquirer.prompt([
+    {
+      name: 'prerelease',
+      type: 'checkbox',
+      message: `It is a Pre-release`,
+      choices: [
+        'Is Draft',
+        'Is Pre-release'
+      ]
+    }
+  ])
+  if (_.indexOf(publishOptions.prerelease, 'Is Draft') >= 0) {
+    draft = true
+  }
+  if (_.indexOf(publishOptions.prerelease, 'Is Pre-release') >= 0) {
+    prerelease = true
+  }
+  
+  /**
+   *  Target commitish branch
+   * @source https://developer.github.com/v3/repos/releases/#input
+   */
+  const branches = await executePromise('git branch')
+  const cleanBranches = _
+    .chain(_.trim(_.toString(branches)))
+    .split('\n')
+    .map(b => _.trim(b))
+    .map(b => _.replace(b, '* ', ''))
+    .filter(b => b !== 'master')
+    .value()
+  const targetCommitishBranch = await inquirer.prompt([
+    {
+      name: 'branch',
+      type: 'rawlist',
+      message: `Target commitish branch`,
+      choices: [
+        `${targetCommitish} (default)`,
+        ...cleanBranches
+      ]
+    }
+  ])
+  if (targetCommitishBranch.branch) {
+    targetCommitish = targetCommitishBranch.branch
+  }
+
   
   const filename = `RELEASE_NOTE${version ? `_${version}` : ``}.md`
   const path = `${process.cwd()}/release-notes/${filename}`
@@ -43,7 +109,7 @@ module.exports = async function () {
   br()
   console.log(`${chalk.yellow('Publishing release to Github!')}`)
   br()
-  console.log(`Currently on branch: ${chalk.green(branch)}`)
+  console.log(`Target Commitish branch: ${chalk.green(targetCommitish)}`)
   console.log(`Release name: ${chalk.green(vVersion)}`)
   console.log(`Token: ${chalk.green(token)}`)
   console.log(`Release Note: ${chalk.green(filename)}`)
@@ -69,26 +135,33 @@ module.exports = async function () {
   /**
    * 
    */
-  // spinner = ora(`committing chore(release): v${newVersion} on ${branch}`).start()
-  // spinner.color = 'yellow';
-  await executePromise('git push --follow-tags')
-  // spinner.succeed('')
+  spinner = ora(`Pushing tag ${vVersion} to origin`).start()
+  spinner.color = 'yellow'
+  await sleep(2000)
+  await executePromise(`git push origin ${vVersion}`)
+  spinner.succeed('')
 
-
+  spinner = ora(`Publishing release ${vVersion}...`).start()
+  spinner.color = 'yellow'
   try {
     await axios.post(url, {
       name: vVersion,
       tag_name: vVersion,
-      target_commitish: branch,
+      // target_commitish: branch,
       body: content,
-      draft: false,
-      prerelease: false,
+      draft,
+      prerelease,
       version
     })
-    console.log('\n')
-    console.log(chalk.green(`Release ${vVersion} for tag ${vVersion} successfully published to Github`))
-    console.log('\n')  
+    spinner.succeed(`Release ${vVersion} for tag ${vVersion} successfully published to Github`)
+    consola.info("Done!")
+    br()
   } catch (err) {
+    if (err.message) {
+      spinner.fail(err.message)
+    } else if (err.code) {
+      spinner.fail(err.code)
+    }
     if (err && err.response) {
       const { status, statusText } = err.response
       if (status === 404) {
@@ -100,6 +173,5 @@ module.exports = async function () {
     }
   }
 
-  consola.info("Done!")
-  br()
+
 }
