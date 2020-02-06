@@ -125,27 +125,43 @@ module.exports = async function () {
     br()
   }
 
+  /**
+   * Push master to origin
+   */
+  const shouldPushMasterToOrigin = await inquirer.prompt([
+    {
+      name: 'merge',
+      type: 'confirm',
+      message: `Do you want to push "master" to origin`,
+    }
+  ])
+  if (shouldPushMasterToOrigin) {
+    spinner = ora(`Pushing "master" to origin...`).start()
+    spinner.color = 'yellow';
+    await sleep(2000)
+    await executePromise(`git push origin master:master`)
+    spinner.succeed('')
+    consola.info("Done!")
+    br()
+  }
 
   /**
-   * 
+   * Push develop to origin
    */
-  // const shouldMergerIntoMaster = await inquirer.prompt([
-  //   {
-  //     name: 'merge',
-  //     type: 'confirm',
-  //     message: `Do you want to push "master" and tag ${vNewVersion} to origin`,
-  //   }
-  // ])
-  // if (shouldMergerIntoMaster) {
-  //   spinner = ora(`Pushing "master" and tag ${vNewVersion} to origin...`).start()
-  //   spinner.color = 'yellow';
-  //   await sleep(2000)
-
-  //   // await executePromise(`git push origin master:master --follow-tags`)
-
-  //   // spinner.succeed('')
-
-  //   // consola.info("Done!")
-  //   // br()
-  // }
+  const shouldPushDevelopToOrigin = await inquirer.prompt([
+    {
+      name: 'merge',
+      type: 'confirm',
+      message: `Do you want to push "develop" to origin`,
+    }
+  ])
+  if (shouldPushDevelopToOrigin) {
+    spinner = ora(`Pushing "develop" to origin...`).start()
+    spinner.color = 'yellow';
+    await sleep(2000)
+    await executePromise(`git push origin develop:develop`)
+    spinner.succeed('')
+    consola.info("Done!")
+    br()
+  }
 }
