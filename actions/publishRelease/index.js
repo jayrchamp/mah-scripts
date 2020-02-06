@@ -89,7 +89,7 @@ module.exports = async function () {
     }
   ])
   if (targetCommitishBranch.branch) {
-    targetCommitish = targetCommitishBranch.branch
+    targetCommitish = _.trim(_.replace(targetCommitishBranch.branch, ' (default)', ''))
   }
 
   
