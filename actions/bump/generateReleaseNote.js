@@ -6,8 +6,14 @@ const { getPreset } = require('../../helpers')
 
 module.exports = function (newVersion) {
   return new Promise(resolve => {
+    const dir = './release-notes'
+
+    if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir);
+    }
+
     const filename = `RELEASE_NOTE${newVersion ? `_${newVersion}` : ``}.md`
-    const filepath = `./release-notes/${filename}`
+    const filepath = `${dir}/${filename}`
     const fileStream = fs.createWriteStream(filepath)
     return cc({
       preset: getPreset(),
