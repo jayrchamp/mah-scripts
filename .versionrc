@@ -1,0 +1,69 @@
+{
+  "types": [
+    {
+      "type": "feat",
+      "section": "🤩 Features",
+      "desc": "A new feature"
+    },
+    {
+      "type": "feature",
+      "section": "🤩 Features",
+      "desc": "A new feature"
+    },
+    {
+      "type": "fix",
+      "section": "🐞 Fixes",
+      "desc": "A bug fix or anything that have been fixed"
+    },
+    {
+      "type": "doc",
+      "section": "✏️ Docs",
+      "desc": "Documentation only changes"
+    },
+    {
+      "type": "refactor",
+      "section": "💡 Refactor",
+      "desc": "A major code change that neither fixes a bug or adds a feature"
+    },
+    {
+      "type": "update",
+      "section": "💡 Update",
+      "desc": "A minor code change that neither fixes a bug or adds a feature"
+    },
+    {
+      "type": "style",
+      "section": "💄 Style",
+      "desc": "Markup, white-space, formatting, missing semi-colons..."
+    },
+    {
+      "type": "perf",
+      "section": "⚡ Performance",
+      "desc": "A code change that improves performance"
+    },
+    {
+      "type": "chore",
+      "section": "🤖 Chore",
+      "desc": "Build process, auxiliary tool changes, changes to build config files",
+      "hidden": true
+    },
+    {
+      "type": "security",
+      "section": "🔐 Security",
+      "desc": "Changes related to security issues"
+    },
+    {
+      "type": "test",
+      "section": "Tests",
+      "desc": "Adding missing tests"
+    },
+    {
+      "type": "clean",
+      "desc" : "(ie.: Remove useless files, delete useless code lines, comments, etc.)",
+      "hidden": true
+    },
+    {
+      "type": "ci",
+      "hidden": true
+    }
+  ]
+}

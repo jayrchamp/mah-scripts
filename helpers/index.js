@@ -1,19 +1,27 @@
 'use strict'
+const consola = require('consola')
+const logger = consola.withScope('helpers')
+
 const _ = require('lodash')
 const exec = require('child_process').exec
 const path = require('path')
 const chalk = require('chalk')
+
 const fs = require('fs')
 const findUp = require('find-up')
 const semver = require('semver')
 const conventionalRecommendedBump = require(`conventional-recommended-bump`)
+
+const root = path.resolve(__dirname, '..')
+
 const pkgPath = path.resolve(process.cwd(), 'package.json')
 let pkg = {version: null}
 pkg = require(pkgPath)
 if (!pkg.version) throw new Error(`Probleme with package.json, can't retrieve version.`)
 
 const configPath = findUp.sync(['.versionrc', '.version.json'])
-const { types = {} } = configPath ? JSON.parse(fs.readFileSync(configPath)) : {}
+let { types = {} } = configPath ? JSON.parse(fs.readFileSync(configPath)) : {}
+
 
 const getPreset = function () {
   return {
@@ -24,7 +32,7 @@ const getPreset = function () {
     compareUrlFormat: '{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}',
     issueUrlFormat: '{{host}}/{{owner}}/{{repository}}/issues/{{id}}',
     userUrlFormat: '{{host}}/{{user}}',
-    releaseCommitMessageFormat: 'chore(release): {{currentTag}}' 
+    releaseCommitMessageFormat: 'chore(release): {{currentTag}}'
   }
 }
 
@@ -38,7 +46,7 @@ const getMahConfig = function () {
 
 /**
  * getRecommandedBump
- * 
+ *
  * @return {object} recommandedBump
  * @return {string} recommandedBump.currentVersion
  * @return {string} recommandedBump.newVersion
@@ -47,11 +55,23 @@ const getMahConfig = function () {
  * @return {string} recommandedBump.releaseType
  */
 const getRecommandedBump = function () {
+  const noVersionRcProvided = _.isEmpty(types)
+  if (noVersionRcProvided) {
+    logger.warn('Not found ".versionrc" on project root. Fallback on default.')
+    const defaultVersionRcPath = root + '/.versionrc'
+    const defaultVersionRc= JSON.parse(fs.readFileSync(defaultVersionRcPath))
+    types = defaultVersionRc.types
+  }
+
   return new Promise(resolve => {
     return conventionalRecommendedBump(
       {
         preset: getPreset(),
       }, async (error, recommendation) => {
+        if (error) {
+          logger.error(error)
+          process.exit(1)
+        }
         resolve({
           currentVersion: getCurrentVersion(),
           newVersion: semver.inc(pkg.version, recommendation.releaseType),
@@ -61,8 +81,8 @@ const getRecommandedBump = function () {
     )
   })
   .catch(error => {
-    console.log(error);
-    
+    logger.error(error)
+    process.exit(1)
   })
 }
 
@@ -123,7 +143,7 @@ const validateMahConfig = function (file) {
       "mah": {
         "repo": "ayourp/app"
       }
-      
+
       ...
     }
       `))
@@ -173,8 +193,8 @@ module.exports = {
   execute,
   sleep,
   br,
-  
-  
+
+
   getCurrentGitBranch,
   getCurrentVersion,
   getAccessToken
