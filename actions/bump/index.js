@@ -41,19 +41,19 @@ module.exports = async function () {
   console.log(` 3. Commit ${chalk.green(`chore(release): ${vNewVersion}`)}`)
   console.log(` 4. Create a tag ${chalk.green(`v${newVersion}`)}`)
   br()
-  
+
   const QUESTION = [
     {
       name: 'bump',
       type: 'confirm',
       message: `Do you want to proceed`,
     }
-  ]  
+  ]
   const answers = await inquirer.prompt(QUESTION)
-  if (!answers.bump) return 
+  if (!answers.bump) return
 
   br()
-  
+
   /**
    * Save new version in package.json
    */
@@ -73,7 +73,7 @@ module.exports = async function () {
   spinner.succeed('')
 
   /**
-   * 
+   *
    */
   spinner = ora(`Committing chore(release): ${vNewVersion} on ${branch}...`).start()
   spinner.color = 'yellow';
@@ -83,11 +83,11 @@ module.exports = async function () {
   console.log(
     commit
   );
-  
+
   spinner.succeed('')
 
   /**
-   * 
+   *
    */
   spinner = ora(`Creating tag ${vNewVersion}"...`).start()
   spinner.color = 'yellow';
@@ -109,7 +109,7 @@ module.exports = async function () {
       message: `Do you want to merge "${branch}" into "master" --ff-only`,
     }
   ])
-  if (shouldMergerIntoMaster) {
+  if (shouldMergerIntoMaster.merge) {
     spinner = ora(`Checking Out "master"`).start()
     spinner.color = 'yellow';
     await sleep(2000)
@@ -135,7 +135,7 @@ module.exports = async function () {
       message: `Do you want to push "master" to origin`,
     }
   ])
-  if (shouldPushMasterToOrigin) {
+  if (shouldPushMasterToOrigin.merge) {
     spinner = ora(`Pushing "master" to origin...`).start()
     spinner.color = 'yellow';
     await sleep(2000)
@@ -155,7 +155,7 @@ module.exports = async function () {
       message: `Do you want to push "develop" to origin`,
     }
   ])
-  if (shouldPushDevelopToOrigin) {
+  if (shouldPushDevelopToOrigin.merge) {
     spinner = ora(`Pushing "develop" to origin...`).start()
     spinner.color = 'yellow';
     await sleep(2000)
