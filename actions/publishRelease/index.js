@@ -104,17 +104,19 @@ module.exports = async function () {
 
   const token = await getAccessToken()
   const branch = await getCurrentGitBranch()
-  const url = `https://api.github.com/repos/${repoOwner}/${repoName}/releases?access_token=${token}`
+  const url = `https://api.github.com/repos/${repoOwner}/${repoName}/releases`
 
   br()
   console.log(`${chalk.yellow('Publishing release to Github!')}`)
   br()
   console.log(`Target Commitish branch: ${chalk.green(targetCommitish)}`)
   console.log(`Release name: ${chalk.green(vVersion)}`)
-  console.log(`Token: ${chalk.green(token)}`)
   console.log(`Release Note: ${chalk.green(filename)}`)
+  console.log(`Github Token: ${chalk.green(token)}`)
   console.log(`Repository: ${chalk.green(repo)}`)
-  console.log(`Url: ${chalk.green(url)}`)
+  console.log(`Endpoint: ${chalk.green(url)}`)
+  console.log(`Headers: ${chalk.green(`Authorization: token ${token}`)}`)
+  
   br()
   
   const QUESTION = [
@@ -144,15 +146,23 @@ module.exports = async function () {
   spinner = ora(`Publishing release ${vVersion}...`).start()
   spinner.color = 'yellow'
   try {
-    await axios.post(url, {
-      name: vVersion,
-      tag_name: vVersion,
-      // target_commitish: branch,
-      body: content,
-      draft,
-      prerelease,
-      version
-    })
+    await axios.post(
+      url, 
+      {
+        name: vVersion,
+        tag_name: vVersion,
+        // target_commitish: branch,
+        body: content,
+        draft,
+        prerelease,
+        version
+      },
+      {
+        headers: {
+          'Authorization': `token ${token}`
+        }
+      }
+    )
     spinner.succeed(`Release ${vVersion} for tag ${vVersion} successfully published to Github`)
     consola.info("Done!")
     br()
