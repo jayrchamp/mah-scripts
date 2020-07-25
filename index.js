@@ -6,6 +6,7 @@ const chalk = require('chalk')
 const bump = require('./actions/bump')
 const publishRelease = require('./actions/publishRelease')
 const releaseNote = require('./actions/releaseNote')
+const manageReleaseAndTags = require('./actions/manageReleaseAndTags')
 const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
 
 ;(async () => {
@@ -27,8 +28,8 @@ const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
         'Bump version + release note + tag',
         'Publish a release note on Github',
         'Generate a release note',
-        'Deploy to App Engine',
-        // 'Delete tags'
+        'Manage releases & tags',
+        'Deploy to App Engine'
       ]
     }
   ]  
@@ -42,6 +43,9 @@ const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
     break
     case 'Generate a release note':
       await releaseNote()
+    break
+    case 'Manage releases & tags':
+      await manageReleaseAndTags()
     break
     case 'Deploy to App Engine':
       br()
@@ -60,31 +64,7 @@ const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
       br()
       br()
     break
-
-
-    // case 'Delete tags':
-    //   console.log('Deleting tags..');
-    //     // await deleteRelease()
-    //   break
   }
+
   process.exit(1)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-  
-
 })()

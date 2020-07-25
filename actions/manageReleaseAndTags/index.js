@@ -22,7 +22,7 @@ const {
   // getCurrentGitBranch,
   getAccessToken
   // publish
-} = require('./helpers')
+} = require('../../helpers')
 
 const config = getMahConfig()
 const repo = _.get(config, 'repo')
@@ -31,7 +31,7 @@ const _repo = _.split(repo, '/')
 const repoOwner = _repo[0]
 const repoName = _repo[1]
 
-;(async () => {
+module.exports = async () => {
     try {
         const token = await getAccessToken()
 
@@ -87,7 +87,7 @@ const repoName = _repo[1]
       console.log(error);
         // rl.close()
     }
-})()
+}
 
 /*
 |--------------------------------------------------------------------------
