@@ -10,6 +10,7 @@ const chalk = require('chalk')
 const fs = require('fs')
 const findUp = require('find-up')
 const semver = require('semver')
+const inquirer = require('inquirer')
 const conventionalRecommendedBump = require(`conventional-recommended-bump`)
 
 const root = path.resolve(__dirname, '..')
@@ -182,6 +183,57 @@ const getAccessToken = function () {
   })
 }
 
+const askVersion = async function (message = '') {
+  let version = getCurrentVersion()
+  
+  const askFor = await inquirer.prompt([
+    {
+      name: 'version',
+      type: 'input',
+      message: message || `Type a version, or press enter for current (${version})`
+    }
+  ])
+  
+  if (askFor.version) {
+    version = askFor.version
+  }
+
+  if (!semver.valid(version)) {
+    logger.error(`Version "${version}" is not valid`)
+    return await askVersion()
+  }
+
+  return semver.clean(version)
+}
+
+// const askFromToVersion = async function () {
+//   const from = await askForVersion(`From which version?`)
+//   const to = await askForVersion(`To which version?`)
+//   return {
+//     from,
+//     to
+//   }
+// }
+
+
+// const askForVersion = async function (message) {  
+//   const askFor = await inquirer.prompt([
+//     {
+//       name: 'version',
+//       type: 'input',
+//       message
+//     }
+//   ])
+//   if (!semver.valid(askFor.version)) {
+//     logger.error(`Version "${askFor.version}" is not valid`)
+//     return await askForVersion()
+//   }
+//   return semver.clean(askFor.version)
+// }
+
+
+
+
 module.exports = {
   getRecommandedBump,
   validateMahConfig,
@@ -189,6 +241,7 @@ module.exports = {
   checkIfExists,
   getMahConfig,
   getContent,
+  askVersion,
   getPreset,
   execute,
   sleep,

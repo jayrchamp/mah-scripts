@@ -16,13 +16,13 @@ module.exports = function (newVersion) {
     const filepath = `${dir}/${filename}`
     const fileStream = fs.createWriteStream(filepath)
     return cc({
-      preset: getPreset(),
-      pkg: {
-        transform (pkg) {
-          pkg.version = `v${newVersion}`
-          return pkg
-        }
-      }
+      preset: getPreset()
+      // pkg: {
+      //   transform (pkg) {
+      //     pkg.version = `v${newVersion}`
+      //     return pkg
+      //   }
+      // }
     })
     .pipe(fileStream).on('close', async () => {
       resolve()

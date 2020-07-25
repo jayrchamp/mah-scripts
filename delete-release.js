@@ -1,6 +1,7 @@
 const exec = require('child_process').exec
 const readlineSync = require('readline-sync')
 const chalk = require('chalk')
+const _ = require('lodash')
 const axios = require('axios');
 
 // const rl = readline.createInterface({
@@ -8,7 +9,29 @@ const axios = require('axios');
 //     output: process.stdout
 // });
 
-(async () => {
+const {
+  // getRecommandedBump,
+  // getCurrentVersion,
+  // checkIfExists,
+  getMahConfig,
+  // getContent,
+  // getPreset,
+  // executePromise,
+  // br,
+  // sleep,
+  // getCurrentGitBranch,
+  getAccessToken
+  // publish
+} = require('./helpers')
+
+const config = getMahConfig()
+const repo = _.get(config, 'repo')
+const _repo = _.split(repo, '/')
+
+const repoOwner = _repo[0]
+const repoName = _repo[1]
+
+;(async () => {
     try {
         const token = await getAccessToken()
 
@@ -61,28 +84,10 @@ const axios = require('axios');
 
         // rl.close()
     } catch (error) {
+      console.log(error);
         // rl.close()
     }
 })()
-
-// rl.question(`\r\nDelete all tags? y/n  `, async (answer) => {
-//     try {
-//         const token = await getAccessToken()
-
-//         if (answer === 'y') {
-//             await deleteTags(token)
-//         }
-
-//         rl.question(`Delete all releases? y/n  `, async (answer) => {
-//             if (answer === 'y') {
-//                 await deleteReleases(token)
-//             }
-//             rl.close()
-//         })
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
 
 /*
 |--------------------------------------------------------------------------
@@ -90,16 +95,23 @@ const axios = require('axios');
 |--------------------------------------------------------------------------
 */
 async function deleteTag (token, tagRef) {
-    return await del(`https://api.github.com/repos/ayourp/app/git/${tagRef}?access_token=${token}`, tagRef, 'Tag')
+    return await del(`https://api.github.com/repos/${repoOwner}/${repoName}/git/${tagRef}`, tagRef, 'Tag', token)
 }
 async function deleteTags (token) {
     return axios
-        .get(`https://api.github.com/repos/ayourp/app/git/refs/tags?access_token=${token}`)
+        .get(
+          `https://api.github.com/repos/${repoOwner}/${repoName}/git/refs/tags`,
+          {
+            headers: {
+              'Authorization': `token ${token}`
+            }
+          }
+        )
         .then(async({ data }) => {
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
                     const tag = data[key]
-                    await del(`https://api.github.com/repos/ayourp/app/git/${tag.ref}?access_token=${token}`, tag.ref, 'Tag')
+                    await del(`https://api.github.com/repos/${repoOwner}/${repoName}/git/${tag.ref}`, tag.ref, 'Tag', token)
                 }
             }
         })
@@ -107,7 +119,14 @@ async function deleteTags (token) {
 }
 async function listTags (token) {
     return axios
-        .get(`https://api.github.com/repos/ayourp/app/git/refs/tags?access_token=${token}`)
+        .get(
+          `https://api.github.com/repos/${repoOwner}/${repoName}/git/refs/tags`,
+          {
+            headers: {
+              'Authorization': `token ${token}`
+            }
+          }
+        )
         .then(async({ data }) => {
             console.log('\n')
             for (const key in data) {
@@ -127,16 +146,23 @@ async function listTags (token) {
 |--------------------------------------------------------------------------
 */
 async function deleteRelease (token, releaseId) {
-    return await del(`https://api.github.com/repos/ayourp/app/releases/${releaseId}?access_token=${token}`, releaseId, 'Release')
+    return await del(`https://api.github.com/repos/${repoOwner}/${repoName}/releases/${releaseId}`, releaseId, 'Release', token)
 }
 async function deleteReleases (token) {
     return axios
-        .get(`https://api.github.com/repos/ayourp/app/releases?access_token=${token}`)
+        .get(
+          `https://api.github.com/repos/${repoOwner}/${repoName}/releases`,
+          {
+            headers: {
+              'Authorization': `token ${token}`
+            }
+          }
+        )
         .then(async({ data }) => {
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
                     const release = data[key]
-                    return await del(`https://api.github.com/repos/ayourp/app/releases/${release.id}?access_token=${token}`, release.id, 'Release')
+                    return await del(`https://api.github.com/repos/${repoOwner}/${repoName}/releases/${release.id}`, release.id, 'Release', token)
                 }
             }
         })
@@ -144,13 +170,20 @@ async function deleteReleases (token) {
 }
 async function listReleases (token) {
     return axios
-        .get(`https://api.github.com/repos/ayourp/app/releases?access_token=${token}`)
+        .get(
+          `https://api.github.com/repos/${repoOwner}/${repoName}/releases`,
+          {
+            headers: {
+              'Authorization': `token ${token}`
+            }
+          }
+        )
         .then(async({ data }) => {
             console.log('\n')
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
                     const release = data[key]
-                    console.log(`id: ${release.id}`)
+                    console.log(`${release.name} id: ${release.id}`)
                 }
             }
             console.log('\n')
@@ -163,9 +196,16 @@ async function listReleases (token) {
 |   Helper functions
 |--------------------------------------------------------------------------
 */
-async function del (baseUrl, id, type) {
+async function del (baseUrl, id, type, token) {
     return axios
-        .delete(baseUrl)
+        .delete(
+          baseUrl,
+          {
+            headers: {
+              'Authorization': `token ${token}`
+            }
+          }
+        )
         .then(({ data: releases }) => {
             console.log('\n')
             console.log(chalk.green(`Resource ${id} deleted successfully`))
@@ -183,17 +223,6 @@ async function del (baseUrl, id, type) {
             }
         })
 }
-
-function execute (command, callback) {
-    exec(command, function (error, stdout, stderr) { callback(stdout) })
-};
-async function getAccessToken () {
-    return new Promise((resolve) => {
-        execute('git config --get github.token', function (token) {
-            resolve(token)
-        })
-    })
-};
 async function askQuestion (question) {
     return new Promise((resolve) => {
         console.log('\r')
@@ -211,7 +240,6 @@ async function askBoolean (question) {
         }
     })
 }
-
 async function askChoices (question, choices) {
     return new Promise((resolve) => {
         const index = readlineSync.keyInSelect(choices, question)

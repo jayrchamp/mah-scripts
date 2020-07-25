@@ -11,6 +11,7 @@ const {
   checkIfExists,
   getMahConfig,
   getContent,
+  askVersion,
   getPreset,
   executePromise,
   br,
@@ -22,26 +23,12 @@ const {
 
 
 module.exports = async function () {
-  let version = getCurrentVersion()
-  let vVersion = `v${version}`
   let prerelease = false
   let draft = false
   let targetCommitish = 'master'
 
-  /**
-   * Change version
-   */
-  const isAnotherVersion = await inquirer.prompt([
-    {
-      name: 'version',
-      type: 'input',
-      message: `Type a version, or press enter for current (${version})`
-    }
-  ])
-  if (isAnotherVersion.version) {
-    version = isAnotherVersion.version
-    vVersion = `v${version}`
-  }
+  const version = await askVersion()
+  const vVersion = `v${version}`
 
   /**
    * Draft, Pre-release

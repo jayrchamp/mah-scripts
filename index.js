@@ -5,51 +5,10 @@ const consola = require('consola')
 const chalk = require('chalk')
 const bump = require('./actions/bump')
 const publishRelease = require('./actions/publishRelease')
+const releaseNote = require('./actions/releaseNote')
 const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
 
-const axios = require('axios')
-
 ;(async () => {
-
-
-//   const token = ''
-//   const vVersion = 'v2.0.1'
-//   const url = `https://api.github.com/repos/ayourp/app/releases/tags/${vVersion}?access_token=${token}`
-
-
-//   try {
-//     const { data } = await axios.get(url)
-//     console.log(
-//       data
-//     );
-    
-//   } catch (err) {
-//     console.log(
-//       err
-//     );
-    
-//     if (err && err.response) {
-//       const { status, statusText } = err.response
-//       if (status === 404) {
-//         console.log('\n')
-//         console.log(chalk.red(`${status} ${err.response.data.message}: The following endpoint is not found on Github end.`))
-//         console.log(err.response.config.url)
-//         console.log('\n')
-//       }
-//     }
-//   }
-// return
-
-
-
-
-
-
-
-
-
-
-
 
   const isValid = validateMahConfig()
   if (!isValid) return
@@ -67,6 +26,7 @@ const axios = require('axios')
       choices: [
         'Bump version + release note + tag',
         'Publish a release note on Github',
+        'Generate a release note',
         'Deploy to App Engine',
         // 'Delete tags'
       ]
@@ -79,6 +39,9 @@ const axios = require('axios')
     break
     case 'Publish a release note on Github':
       await publishRelease()
+    break
+    case 'Generate a release note':
+      await releaseNote()
     break
     case 'Deploy to App Engine':
       br()
