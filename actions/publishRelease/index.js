@@ -135,13 +135,13 @@ module.exports = async function () {
   const content = await getContent(path)
 
   /**
-   * 
+   * Pushing version is now done during bump version
    */
-  spinner = ora(`Pushing tag ${vVersion} to origin`).start()
-  spinner.color = 'yellow'
-  await sleep(2000)
-  await executePromise(`git push origin ${vVersion}`)
-  spinner.succeed('')
+  // spinner = ora(`Pushing tag ${vVersion} to origin`).start()
+  // spinner.color = 'yellow'
+  // await sleep(2000)
+  // await executePromise(`git push origin ${vVersion}`)
+  // spinner.succeed('')
 
   spinner = ora(`Publishing release ${vVersion}...`).start()
   spinner.color = 'yellow'
