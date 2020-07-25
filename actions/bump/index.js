@@ -91,7 +91,6 @@ module.exports = async function () {
   await executePromise(`git tag "${vNewVersion}"`)
   spinner.succeed('')
 
-
   consola.info("Done!")
   br()
 
@@ -106,7 +105,7 @@ module.exports = async function () {
       message: `Do you want to merge "${branch}" into "master" --ff-only`,
     }
   ])
-  if (shouldMergerIntoMaster) {
+  if (shouldMergerIntoMaster.merge) {
     spinner = ora(`Checking Out "master"`).start()
     spinner.color = 'yellow';
     await sleep(2000)
@@ -132,12 +131,7 @@ module.exports = async function () {
       message: `Do you want to push "master" to origin`,
     }
   ])
-  console.log('\n')
-  console.log( 
-    shouldPushMasterToOrigin
-   )
-  console.log('\n')
-  if (shouldPushMasterToOrigin) {
+  if (shouldPushMasterToOrigin.merge) {
     spinner = ora(`Pushing "master" to origin...`).start()
     spinner.color = 'yellow';
     await sleep(2000)
@@ -157,7 +151,7 @@ module.exports = async function () {
       message: `Do you want to push "develop" to origin`,
     }
   ])
-  if (shouldPushDevelopToOrigin) {
+  if (shouldPushDevelopToOrigin.merge) {
     spinner = ora(`Pushing "develop" to origin...`).start()
     spinner.color = 'yellow';
     await sleep(2000)
@@ -177,7 +171,7 @@ module.exports = async function () {
       message: `Do you want to push tag "${vNewVersion}" to origin`,
     }
   ])
-  if (shouldPushTagToOrigin) {
+  if (shouldPushTagToOrigin.merge) {
     spinner = ora(`Pushing tag ${vNewVersion} to origin`).start()
     spinner.color = 'yellow'
     await sleep(2000)
