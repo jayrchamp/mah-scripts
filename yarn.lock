@@ -23,17 +23,17 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@jayrchamp/mah-scripts@^1.1.1":
-  version "1.1.1"
-  resolved "https://npm.pkg.github.com/download/@jayrchamp/mah-scripts/1.1.1/55c6f9a430a35c60fd7e3247603023c1f14caa6a91e1fbada40ef7889b341228#f1ea6ed575bb1906349495aa9ac61029a067f1bd"
-  integrity sha512-bHEcADd0O5wYIYtRnJbdHIPcAWJEeYTuIZd/tEG5a2X5wqEtyq0ZTzbqKD7/dkYaHb0oE2x0WvYCXpvKehLt+g==
+"@jayrchamp/mah-scripts@^1.1.4":
+  version "1.1.4"
+  resolved "https://npm.pkg.github.com/download/@jayrchamp/mah-scripts/1.1.4/caef7653b04527d9834654f176934e7ed8395407713c556c9db07c154c754802#5f69f63b67edb9969f4a2b9aefa913e288ca3ed1"
+  integrity sha512-nhlXhUlpGnXQCWGkh3M8dTJUNxM7WZvvDqt6HdpZHeg85Vg+B9QrqEIK3T8Fnq4ly6MCKydPSrtS0MOpHXVRKA==
   dependencies:
     axios "^0.19.2"
     chalk "^3.0.0"
     consola "^2.11.3"
     conventional-recommended-bump "^6.0.10"
     find-up "^4.1.0"
-    inquirer "^7.0.4"
+    inquirer "^7.3.3"
     lodash "^4.17.19"
     ora "^4.0.3"
     readline-sync "^1.4.10"
@@ -813,7 +813,7 @@ ini@^1.3.2:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
   integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
 
-inquirer@^7.0.4, inquirer@^7.3.3:
+inquirer@^7.3.3:
   version "7.3.3"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-7.3.3.tgz#04d176b2af04afc157a83fd7c100e98ee0aad003"
   integrity sha512-JG3eIAj5V9CwcGvuOmoo6LB9kbAYT8HXffUl6memuszlwDC/qvFAJw49XJ5NROSFNPxp3iQg1GqkFhaY/CR0IA==
