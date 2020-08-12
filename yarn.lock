@@ -2,6 +2,22 @@
 # yarn lockfile v1
 
 
+"@jayrchamp/mah-scripts@^1.0.0":
+  version "1.0.0"
+  resolved "https://npm.pkg.github.com/download/@jayrchamp/mah-scripts/1.0.0/99eaffca7e6eedbc2e6f2dc24ed74de1f36822ada3d12b6e84c1951c8bd976f8#3057f9bd5b64e7a7475b43d15a5a34dd23f5a276"
+  integrity sha512-QjqoweopcD3MQJ0DNbJe7r/inY6QYAKjhU7IAswv9blNq96cOptR+sRe5umjzK7pA0Rmnn/pd/FtfxCJCctaNg==
+  dependencies:
+    axios "^0.19.2"
+    chalk "^3.0.0"
+    consola "^2.11.3"
+    conventional-recommended-bump "^6.0.5"
+    find-up "^4.1.0"
+    inquirer "^7.0.4"
+    lodash "^4.17.15"
+    ora "^4.0.3"
+    readline-sync "^1.4.10"
+    semver "^7.1.2"
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
