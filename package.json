@@ -1,6 +1,6 @@
 {
   "name": "@jayrchamp/mah-scripts",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "chalk": "^3.0.0",
     "consola": "^2.11.3",
+    "conventional-changelog": "^3.1.23",
     "conventional-recommended-bump": "^6.0.10",
     "find-up": "^4.1.0",
     "inquirer": "^7.3.3",
@@ -18,7 +19,6 @@
     "ora": "^4.0.3",
     "readline-sync": "^1.4.10",
     "semver": "^7.1.2",
-    "conventional-changelog": "^3.1.23",
     "standard-changelog": "^2.0.24",
     "standard-version": "^8.0.2"
   },
