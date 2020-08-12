@@ -4,11 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "mah": "./node_modules/.bin/mah",
+    "mah": "node ./index.js",
     "npm:publish": "npm publish"
   },
   "devDependencies": {
-    "@jayrchamp/mah-scripts": "^1.1.4",
     "conventional-changelog": "^3.1.23",
     "standard-changelog": "^2.0.24",
     "standard-version": "^8.0.2"
