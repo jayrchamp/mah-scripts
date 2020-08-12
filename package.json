@@ -7,11 +7,6 @@
     "mah": "node ./index.js",
     "npm:publish": "npm publish"
   },
-  "devDependencies": {
-    "conventional-changelog": "^3.1.23",
-    "standard-changelog": "^2.0.24",
-    "standard-version": "^8.0.2"
-  },
   "dependencies": {
     "axios": "^0.19.2",
     "chalk": "^3.0.0",
@@ -22,7 +17,10 @@
     "lodash": "^4.17.19",
     "ora": "^4.0.3",
     "readline-sync": "^1.4.10",
-    "semver": "^7.1.2"
+    "semver": "^7.1.2",
+    "conventional-changelog": "^3.1.23",
+    "standard-changelog": "^2.0.24",
+    "standard-version": "^8.0.2"
   },
   "bin": {
     "mah": "./index.js"
