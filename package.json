@@ -8,10 +8,10 @@
     "npm:publish": "npm publish"
   },
   "devDependencies": {
-    "@jayrchamp/mah-scripts": "^1.0.0",
-    "conventional-changelog": "^3.1.18",
-    "standard-changelog": "^2.0.26",
-    "standard-version": "^8.0.1"
+    "@jayrchamp/mah-scripts": "^1.1.1",
+    "conventional-changelog": "^3.1.23",
+    "standard-changelog": "^2.0.24",
+    "standard-version": "^8.0.2"
   },
   "dependencies": {
     "axios": "^0.19.2",

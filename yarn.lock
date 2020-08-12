@@ -23,7 +23,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@jayrchamp/mah-scripts@^1.0.0":
+"@jayrchamp/mah-scripts@^1.1.1":
   version "1.1.1"
   resolved "https://npm.pkg.github.com/download/@jayrchamp/mah-scripts/1.1.1/55c6f9a430a35c60fd7e3247603023c1f14caa6a91e1fbada40ef7889b341228#f1ea6ed575bb1906349495aa9ac61029a067f1bd"
   integrity sha512-bHEcADd0O5wYIYtRnJbdHIPcAWJEeYTuIZd/tEG5a2X5wqEtyq0ZTzbqKD7/dkYaHb0oE2x0WvYCXpvKehLt+g==
@@ -436,7 +436,7 @@ conventional-changelog@3.1.21:
     conventional-changelog-jshint "^2.0.7"
     conventional-changelog-preset-loader "^2.3.4"
 
-conventional-changelog@^3.1.18:
+conventional-changelog@^3.1.23:
   version "3.1.23"
   resolved "https://registry.yarnpkg.com/conventional-changelog/-/conventional-changelog-3.1.23.tgz#d696408021b579a3814aba79b38729ed86478aea"
   integrity sha512-sScUu2NHusjRC1dPc5p8/b3kT78OYr95/Bx7Vl8CPB8tF2mG1xei5iylDTRjONV5hTlzt+Cn/tBWrKdd299b7A==
@@ -1609,15 +1609,15 @@ sprintf-js@^1.1.1:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.1.2.tgz#da1765262bf8c0f571749f2ad6c26300207ae673"
   integrity sha512-VE0SOVEHCk7Qc8ulkWw3ntAzXuqf7S2lvwQaDLRnUeIEaKNQJzV6BwmLKhOqT61aGhfUMrXeaBk+oDGCzvhcug==
 
-standard-changelog@^2.0.26:
-  version "2.0.26"
-  resolved "https://registry.yarnpkg.com/standard-changelog/-/standard-changelog-2.0.26.tgz#7b2cce824df7564c99f81f9d39cc3db50ff0de02"
-  integrity sha512-mfli/AqLHwl1CZ6Jo6pB3HB3Mc1Qd1uZDIIVICLFMZlFacEOtdagp44pV3D2X6pq1gupGMffIdKbMQTt2L8qSQ==
+standard-changelog@^2.0.24:
+  version "2.0.24"
+  resolved "https://registry.yarnpkg.com/standard-changelog/-/standard-changelog-2.0.24.tgz#a4a9e821942e26575ebb7562d8af4061f92a9825"
+  integrity sha512-Tp0y5rkB8BKoURus4+fMcOXUpP1K2MrHAlMhMrBsz+25Evbn/72MdNN0IGVTctp7gioRXaeSb2HnfRY1PRaSyg==
   dependencies:
     add-stream "^1.0.0"
     chalk "^4.0.0"
-    conventional-changelog-angular "^5.0.11"
-    conventional-changelog-core "^4.2.0"
+    conventional-changelog-angular "^5.0.10"
+    conventional-changelog-core "^4.1.7"
     figures "^3.0.0"
     fs-access "^1.0.0"
     lodash "^4.17.15"
@@ -1626,7 +1626,7 @@ standard-changelog@^2.0.26:
     sprintf-js "^1.1.1"
     tempfile "^3.0.0"
 
-standard-version@^8.0.1:
+standard-version@^8.0.2:
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/standard-version/-/standard-version-8.0.2.tgz#02ed7131f83046bd04358dc54f97d42c4b2fd828"
   integrity sha512-L8X9KFq2SmVmaeZgUmWHFJMOsEWpjgFAwqic6yIIoveM1kdw1vH4Io03WWxUDjypjGqGU6qUtcJoR8UvOv5w3g==
