@@ -71,5 +71,4 @@ const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
     console.log('\n')
     consola.error(err)
   }
-  process.exit(1)
 })()
