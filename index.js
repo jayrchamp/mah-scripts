@@ -29,7 +29,8 @@ const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
           'Publish a release note on Github',
           'Generate a release note',
           'Manage releases & tags',
-          'Deploy to App Engine'
+          'Deploy to Prod App Engine',
+          'Deploy to Staging App Engine'
         ]
       }
     ]  
@@ -47,7 +48,7 @@ const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
       case 'Manage releases & tags':
         await manageReleaseAndTags()
       break
-      case 'Deploy to App Engine':
+      case 'Deploy to Prod App Engine':
         br()
         br()
         consola.info(chalk.yellow('1. Ensures to bump version + release note + tag'))
@@ -57,10 +58,21 @@ const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
         consola.log(chalk.green(`     git checkout master && yarn build`))
         br()
         consola.info(chalk.yellow('3. Ensure to build project from "master" branch'))
-        consola.log(chalk.green(`     yarn build`))
+        consola.log(chalk.green(`     yarn prod:build`))
         br()
         consola.info(chalk.yellow('4. Run following command line to Deploy to app engine'))
         consola.log(chalk.green(`     gcloud app deploy --version v${ver} app.yaml --no-promote`))
+        br()
+        br()
+      break
+      case 'Deploy to Staging App Engine':
+        br()
+        br()
+        consola.info(chalk.yellow('3. Ensure to build project'))
+        consola.log(chalk.green(`     yarn staging:build`))
+        br()
+        consola.info(chalk.yellow('4. Run following command line to Deploy to app engine'))
+        consola.log(chalk.green(`     gcloud app deploy --version v${ver} staging.yaml --no-promote`))
         br()
         br()
       break
