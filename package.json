@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "mah": "node ./index.js",
-    "npm:publish": "npm publish"
+    "npm:publish": "npm publish --access public"
   },
   "dependencies": {
     "axios": "^0.19.2",
