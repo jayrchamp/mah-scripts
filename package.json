@@ -26,6 +26,9 @@
     "mah": "./index.js"
   },
   "mah": {
-    "repo": "jayrchamp/mah-scripts"
+    "repo": "jayrchamp/mah-scripts",
+    "default-branch": "master",
+    "deploy-tmpl-prod": "gcloud app deploy --version v{VERSION} app.yaml --no-promote --project=test-project",
+    "deploy-tmpl-staging": "gcloud app deploy --version v{VERSION} staging.yaml --no-promote --project=test-project-staging"
   }
 }
