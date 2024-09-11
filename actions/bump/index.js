@@ -96,23 +96,23 @@ module.exports = async function () {
 
 
   /**
-   * Should it merge {branch} into master?
+   * Should it merge {branch} into main?
    */
   const shouldMergerIntoMaster = await inquirer.prompt([
     {
       name: 'merge',
       type: 'confirm',
-      message: `Do you want to merge "${branch}" into "master" --ff-only`,
+      message: `Do you want to merge "${branch}" into "main" --ff-only`,
     }
   ])
   if (shouldMergerIntoMaster.merge) {
-    spinner = ora(`Checking Out "master"`).start()
+    spinner = ora(`Checking Out "main"`).start()
     spinner.color = 'yellow';
     await sleep(2000)
-    await executePromise(`git checkout master`)
+    await executePromise(`git checkout main`)
     spinner.succeed('')
 
-    spinner = ora(`Merging branch "${branch}" into "master" --ff-only...`).start()
+    spinner = ora(`Merging branch "${branch}" into "main" --ff-only...`).start()
     spinner.color = 'yellow';
     await sleep(2000)
     await executePromise(`git merge ${branch} --ff-only`)
@@ -122,20 +122,20 @@ module.exports = async function () {
   }
 
   /**
-   * Push master to origin
+   * Push main to origin
    */
   const shouldPushMasterToOrigin = await inquirer.prompt([
     {
       name: 'merge',
       type: 'confirm',
-      message: `Do you want to push "master" to origin`,
+      message: `Do you want to push "main" to origin`,
     }
   ])
   if (shouldPushMasterToOrigin.merge) {
-    spinner = ora(`Pushing "master" to origin...`).start()
+    spinner = ora(`Pushing "main" to origin...`).start()
     spinner.color = 'yellow';
     await sleep(2000)
-    await executePromise(`git push origin master:master`)
+    await executePromise(`git push origin main:main`)
     spinner.succeed('')
     consola.info("Done!")
     br()
