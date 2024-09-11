@@ -41,6 +41,33 @@ const getCurrentVersion = function () {
   return pkg.version
 }
 
+const getConfig = function (path) {
+  return _.get(pkg, `mah.${path}`)
+}
+
+const getConfigDefaultBranch = function () {
+  return _.get(pkg, 'mah.default-branch', 'master')
+}
+
+const getConfigDeployTmpl = function (args, type) {
+  const tmpl = _.get(pkg, `mah.deploy-tmpl-${type}`) || _.get(pkg, 'mah.deploy-tmpl')
+  if (!tmpl) return ''
+  try {
+    const template = _.template(tmpl, {
+      interpolate: /{([\s\S]+?)}/g
+    });
+    const result = template(args);
+    return result
+  } catch (error) {
+    if (error.message.includes('is not defined')) {
+      const variable = error.message.split(' ')[0]
+      logger.error(`[@jayrchamp/mah-scripts] Variable "${variable}" is not defined in mah.deploy-tmpl of package.json`)
+      return
+    }
+    throw error
+  }
+}
+
 const getMahConfig = function () {
   return pkg.mah
 }
@@ -247,8 +274,10 @@ module.exports = {
   sleep,
   br,
 
-
+  getConfig,
   getCurrentGitBranch,
   getCurrentVersion,
-  getAccessToken
+  getAccessToken,
+  getConfigDefaultBranch,
+  getConfigDeployTmpl
 }

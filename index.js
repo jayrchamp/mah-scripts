@@ -7,7 +7,7 @@ const bump = require('./actions/bump')
 const publishRelease = require('./actions/publishRelease')
 const releaseNote = require('./actions/releaseNote')
 const manageReleaseAndTags = require('./actions/manageReleaseAndTags')
-const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
+const { getConfigDeployTmpl, getCurrentVersion, validateMahConfig, br } = require('./helpers')
 
 ;(async () => {
   try {
@@ -49,6 +49,9 @@ const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
         await manageReleaseAndTags()
       break
       case 'Deploy to Prod App Engine':
+        const deployProdDefault = `gcloud app deploy --version v${ver} app.yaml --no-promote`
+        const deployProdCmd = getConfigDeployTmpl({ VERSION: ver }, 'prod') || deployProdDefault
+
         br()
         br()
         consola.info(chalk.yellow('1. Ensures to bump version + release note + tag'))
@@ -61,18 +64,20 @@ const { getCurrentVersion, validateMahConfig, br } = require('./helpers')
         consola.log(chalk.green(`     yarn prod:build`))
         br()
         consola.info(chalk.yellow('4. Run following command line to Deploy to app engine'))
-        consola.log(chalk.green(`     gcloud app deploy --version v${ver} app.yaml --no-promote`))
+        consola.log(chalk.green(`     ${deployProdCmd}`))
         br()
         br()
       break
       case 'Deploy to Staging App Engine':
+      const deployStagingDefault = `gcloud app deploy --version v${ver} staging.yaml --no-promote`
+      const deployStagingCmd = getConfigDeployTmpl({ VERSION: ver }, 'staging') || deployStagingDefault
         br()
         br()
         consola.info(chalk.yellow('3. Ensure to build project'))
         consola.log(chalk.green(`     yarn staging:build`))
         br()
         consola.info(chalk.yellow('4. Run following command line to Deploy to app engine'))
-        consola.log(chalk.green(`     gcloud app deploy --version v${ver} staging.yaml --no-promote`))
+        consola.log(chalk.green(`     ${deployStagingCmd}`))
         br()
         br()
       break

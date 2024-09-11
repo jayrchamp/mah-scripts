@@ -7,6 +7,7 @@ const bump = require('./bumpVersion')
 const {
   getCurrentVersion,
   getRecommandedBump,
+  getConfig,
   getPreset,
   getCurrentGitBranch,
   executePromise,
@@ -16,6 +17,9 @@ const {
 
 module.exports = async function () {
   let spinner
+
+  const defaultBranch = getConfig('default-branch') || 'master'
+  // const defaultBranchOrigin = getConfig('default-branch-origin') || 'master'
 
   /**
    * Get recommanded bump version based on semantic commit messages
@@ -102,17 +106,17 @@ module.exports = async function () {
     {
       name: 'merge',
       type: 'confirm',
-      message: `Do you want to merge "${branch}" into "main" --ff-only`,
+      message: `Do you want to merge "${branch}" into "${defaultBranch}" --ff-only`,
     }
   ])
   if (shouldMergerIntoMaster.merge) {
-    spinner = ora(`Checking Out "main"`).start()
+    spinner = ora(`Checking Out "${defaultBranch}"`).start()
     spinner.color = 'yellow';
     await sleep(2000)
-    await executePromise(`git checkout main`)
+    await executePromise(`git checkout ${defaultBranch}`)
     spinner.succeed('')
 
-    spinner = ora(`Merging branch "${branch}" into "main" --ff-only...`).start()
+    spinner = ora(`Merging branch "${branch}" into "${defaultBranch}" --ff-only...`).start()
     spinner.color = 'yellow';
     await sleep(2000)
     await executePromise(`git merge ${branch} --ff-only`)
@@ -128,14 +132,14 @@ module.exports = async function () {
     {
       name: 'merge',
       type: 'confirm',
-      message: `Do you want to push "main" to origin`,
+      message: `Do you want to push "${defaultBranch}" to origin`,
     }
   ])
   if (shouldPushMasterToOrigin.merge) {
-    spinner = ora(`Pushing "main" to origin...`).start()
+    spinner = ora(`Pushing "${defaultBranch}" to origin...`).start()
     spinner.color = 'yellow';
     await sleep(2000)
-    await executePromise(`git push origin main:main`)
+    await executePromise(`git push origin ${defaultBranch}:${defaultBranch}`)
     spinner.succeed('')
     consola.info("Done!")
     br()
