@@ -92,7 +92,7 @@ module.exports = async function () {
   spinner = ora(`Creating tag ${vNewVersion}"...`).start()
   spinner.color = 'yellow';
   await sleep(2000)
-  await executePromise(`git tag "${vNewVersion}"`)
+  await executePromise(`git tag -a "${vNewVersion}" -m "Release ${vNewVersion}"`)
   spinner.succeed('')
 
   consola.info("Done!")
