@@ -11,7 +11,6 @@ const {
   getPreset,
   getCurrentGitBranch,
   executePromise,
-  sleep,
   br
 } = require('../../helpers')
 
@@ -63,7 +62,6 @@ module.exports = async function () {
    */
   spinner = ora(`Bumping package.json version to ${newVersion}...`).start()
   spinner.color = 'yellow';
-  await sleep(2000)
   await bump(newVersion)
   spinner.succeed('')
 
@@ -72,7 +70,6 @@ module.exports = async function () {
    */
   spinner = ora(`Creating release note to ${releaseNoteFilename}...`).start()
   spinner.color = 'yellow';
-  await sleep(2000)
   await generateReleaseNote(newVersion)
   spinner.succeed('')
 
@@ -81,7 +78,6 @@ module.exports = async function () {
    */
   spinner = ora(`Committing chore(release): ${vNewVersion} on ${branch}...`).start()
   spinner.color = 'yellow';
-  await sleep(2000)
   await executePromise('git add -A')
   const commit = await executePromise(`git commit -m "chore(release): ${vNewVersion}"`)
   spinner.succeed('')
@@ -91,7 +87,6 @@ module.exports = async function () {
    */
   spinner = ora(`Creating tag ${vNewVersion}"...`).start()
   spinner.color = 'yellow';
-  await sleep(2000)
   await executePromise(`git tag -a "${vNewVersion}" -m "Release ${vNewVersion}"`)
   spinner.succeed('')
 
@@ -112,13 +107,11 @@ module.exports = async function () {
   if (shouldMergerIntoMaster.merge) {
     spinner = ora(`Checking Out "${defaultBranch}"`).start()
     spinner.color = 'yellow';
-    await sleep(2000)
     await executePromise(`git checkout ${defaultBranch}`)
     spinner.succeed('')
 
     spinner = ora(`Merging branch "${branch}" into "${defaultBranch}" --ff-only...`).start()
     spinner.color = 'yellow';
-    await sleep(2000)
     await executePromise(`git merge ${branch} --ff-only`)
     spinner.succeed('')
     consola.info("Done!")
@@ -138,7 +131,6 @@ module.exports = async function () {
   if (shouldPushMasterToOrigin.merge) {
     spinner = ora(`Pushing "${defaultBranch}" to origin...`).start()
     spinner.color = 'yellow';
-    await sleep(2000)
     await executePromise(`git push origin ${defaultBranch}:${defaultBranch}`)
     spinner.succeed('')
     consola.info("Done!")
@@ -159,7 +151,6 @@ module.exports = async function () {
   if (shouldPushTagToOrigin.merge) {
     spinner = ora(`Pushing tag ${vNewVersion} to origin`).start()
     spinner.color = 'yellow'
-    await sleep(2000)
     await executePromise(`git push origin ${vNewVersion}`)
     spinner.succeed('')
       br()
