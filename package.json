@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "mah": "node ./index.js",
-    "npm:publish": "npm publish --access public"
+    "npm:publish": "npm publish --access public",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -30,5 +31,12 @@
     "default-branch": "master",
     "deploy-tmpl-prod": "gcloud app deploy --version v{VERSION} app.yaml --no-promote --project=test-project",
     "deploy-tmpl-staging": "gcloud app deploy --version v{VERSION} staging.yaml --no-promote --project=test-project-staging"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0"
+  },
+  "volta": {
+    "node": "24.13.0",
+    "yarn": "1.22.22"
   }
 }
