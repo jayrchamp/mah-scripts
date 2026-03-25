@@ -52,10 +52,9 @@ describe('bump action (actions/bump/index.js)', () => {
   it('calls bumpVersion and generateReleaseNote when user confirms', async () => {
     inquirer.prompt
       .mockResolvedValueOnce({ bump: true })
-      .mockResolvedValueOnce({ merge: false })
-      .mockResolvedValueOnce({ merge: false })
-      .mockResolvedValueOnce({ merge: false })
-      .mockResolvedValueOnce({ merge: false })
+      .mockResolvedValueOnce({ merge: false })  // merge into default branch
+      .mockResolvedValueOnce({ merge: false })  // push default branch
+      .mockResolvedValueOnce({ merge: false })  // push tag
 
     const bump = require('../../../actions/bump/index')
     await bump()
@@ -70,7 +69,6 @@ describe('bump action (actions/bump/index.js)', () => {
       .mockResolvedValueOnce({ bump: true })
       .mockResolvedValueOnce({ merge: true })  // merge into default branch
       .mockResolvedValueOnce({ merge: true })  // push default branch
-      .mockResolvedValueOnce({ merge: true })  // push develop
       .mockResolvedValueOnce({ merge: true })  // push tag
 
     const bump = require('../../../actions/bump/index')
@@ -83,8 +81,8 @@ describe('bump action (actions/bump/index.js)', () => {
     expect(cmds.some(c => c.includes('git merge') && c.includes('--ff-only'))).toBe(true)
     // git push origin master:master
     expect(cmds.some(c => c.includes('git push origin master:master'))).toBe(true)
-    // git push origin develop:develop
-    expect(cmds.some(c => c.includes('git push origin develop:develop'))).toBe(true)
+    // develop is no longer pushed
+    expect(cmds.some(c => c.includes('git push origin develop:develop'))).toBe(false)
     // git push origin tag vX.X.X
     expect(cmds.some(c => c.startsWith('git push origin v'))).toBe(true)
   })

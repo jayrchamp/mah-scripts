@@ -145,25 +145,6 @@ module.exports = async function () {
     br()
   }
 
-  /**
-   * Push develop to origin
-   */
-  const shouldPushDevelopToOrigin = await inquirer.prompt([
-    {
-      name: 'merge',
-      type: 'confirm',
-      message: `Do you want to push "develop" to origin`,
-    }
-  ])
-  if (shouldPushDevelopToOrigin.merge) {
-    spinner = ora(`Pushing "develop" to origin...`).start()
-    spinner.color = 'yellow';
-    await sleep(2000)
-    await executePromise(`git push origin develop:develop`)
-    spinner.succeed('')
-    consola.info("Done!")
-    br()
-  }
 
   /**
    * Push tag to origin
@@ -181,14 +162,6 @@ module.exports = async function () {
     await sleep(2000)
     await executePromise(`git push origin ${vNewVersion}`)
     spinner.succeed('')
-
-
-    // spinner = ora(`Pushing "develop" to origin...`).start()
-    // spinner.color = 'yellow';
-    // await sleep(2000)
-    // await executePromise(`git push origin develop:develop`)
-    // spinner.succeed('')
-    // consola.info("Done!")
-    br()
+      br()
   }
 }
