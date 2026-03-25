@@ -16,8 +16,10 @@ jest.mock(
     mah: {
       repo: 'owner/repo',
       'default-branch': 'main',
-      'deploy-tmpl-prod': 'gcloud deploy {VERSION} app.yaml',
-      'deploy-tmpl-staging': 'gcloud deploy {VERSION} staging.yaml'
+      'deploy-tmpl': {
+        prod: 'gcloud deploy {VERSION} app.yaml',
+        staging: 'gcloud deploy {VERSION} staging.yaml'
+      }
     }
   }),
   { virtual: true }
@@ -117,19 +119,65 @@ describe('getMahConfig()', () => {
 // getConfigDeployTmpl
 // ---------------------------------------------------------------------------
 describe('getConfigDeployTmpl()', () => {
-  it('interpolates VERSION in prod template', () => {
+  it('interpolates VERSION using new nested deploy-tmpl format', () => {
     const result = helpers.getConfigDeployTmpl({ VERSION: '1-2-0' }, 'prod')
     expect(result).toBe('gcloud deploy 1-2-0 app.yaml')
   })
 
-  it('interpolates VERSION in staging template', () => {
+  it('interpolates VERSION for staging env', () => {
     const result = helpers.getConfigDeployTmpl({ VERSION: '1-2-0' }, 'staging')
     expect(result).toBe('gcloud deploy 1-2-0 staging.yaml')
   })
 
-  it('returns empty string when type has no template and no fallback', () => {
+  it('returns empty string when type has no matching template', () => {
     const result = helpers.getConfigDeployTmpl({ VERSION: '1' }, 'unknown')
     expect(result).toBe('')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// getDeployTemplates
+// ---------------------------------------------------------------------------
+describe('getDeployTemplates()', () => {
+  it('returns the deploy-tmpl object from new format', () => {
+    const templates = helpers.getDeployTemplates()
+    expect(templates).toEqual({
+      prod: 'gcloud deploy {VERSION} app.yaml',
+      staging: 'gcloud deploy {VERSION} staging.yaml'
+    })
+  })
+
+  it('returns correct env keys that can be used as menu choices', () => {
+    const keys = Object.keys(helpers.getDeployTemplates())
+    expect(keys).toContain('prod')
+    expect(keys).toContain('staging')
+  })
+
+  it('returns env → template map for backward-compat flat-key format', () => {
+    jest.resetModules()
+    jest.mock('find-up', () => ({ sync: jest.fn(() => null) }))
+    jest.mock(
+      require('path').resolve(process.cwd(), 'package.json'),
+      () => ({
+        version: '1.0.0',
+        mah: {
+          repo: 'owner/repo',
+          'deploy-tmpl-prod': 'gcloud deploy {VERSION} app.yaml',
+          'deploy-tmpl-staging': 'gcloud deploy {VERSION} staging.yaml'
+        }
+      }),
+      { virtual: true }
+    )
+    jest.mock('conventional-recommended-bump', () => jest.fn())
+    jest.mock('child_process', () => ({ exec: jest.fn() }))
+    jest.mock('inquirer', () => ({ prompt: jest.fn() }))
+
+    const freshHelpers = require('../../helpers/index')
+    const templates = freshHelpers.getDeployTemplates()
+    expect(templates).toEqual({
+      prod: 'gcloud deploy {VERSION} app.yaml',
+      staging: 'gcloud deploy {VERSION} staging.yaml'
+    })
   })
 })
 

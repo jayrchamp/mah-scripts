@@ -29,8 +29,11 @@
   "mah": {
     "repo": "jayrchamp/mah-scripts",
     "default-branch": "master",
-    "deploy-tmpl-prod": "gcloud app deploy --version v{VERSION} app.yaml --no-promote --project=test-project",
-    "deploy-tmpl-staging": "gcloud app deploy --version v{VERSION} staging.yaml --no-promote --project=test-project-staging"
+    "deploy-tmpl": {
+      "production": "gcloud app deploy --version v{VERSION} app.yaml --no-promote --project=test-project",
+      "staging": "gcloud app deploy --version v{VERSION} staging.yaml --no-promote --project=test-project-staging",
+      "sandbox": "gcloud app deploy --version v{VERSION} sandbox.yaml --no-promote --project=test-project-sandbox"
+    }
   },
   "devDependencies": {
     "jest": "^30.3.0"

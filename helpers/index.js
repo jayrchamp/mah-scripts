@@ -50,7 +50,11 @@ const getConfigDefaultBranch = function () {
 }
 
 const getConfigDeployTmpl = function (args, type) {
-  const tmpl = _.get(pkg, `mah.deploy-tmpl-${type}`) || _.get(pkg, 'mah.deploy-tmpl')
+  // New format: mah.deploy-tmpl is an object keyed by env name
+  const newTmpl = _.get(pkg, `mah.deploy-tmpl.${type}`)
+  // Backward-compat: mah.deploy-tmpl-{type} (e.g. deploy-tmpl-prod)
+  const oldTmpl = _.get(pkg, `mah.deploy-tmpl-${type}`)
+  const tmpl = newTmpl || oldTmpl
   if (!tmpl) return ''
   try {
     const template = _.template(tmpl, {
@@ -66,6 +70,27 @@ const getConfigDeployTmpl = function (args, type) {
     }
     throw error
   }
+}
+
+/**
+ * Returns a map of { envName → rawTemplate } built from the active config.
+ * Supports both the new nested format (mah.deploy-tmpl object) and the
+ * old flat keys (mah.deploy-tmpl-prod, mah.deploy-tmpl-staging, …).
+ */
+const getDeployTemplates = function () {
+  const newFormat = _.get(pkg, 'mah.deploy-tmpl')
+  if (newFormat && typeof newFormat === 'object') {
+    return newFormat
+  }
+  // Backward-compat: collect all mah.deploy-tmpl-* flat keys
+  const mah = pkg.mah || {}
+  const templates = {}
+  Object.keys(mah)
+    .filter(k => k.startsWith('deploy-tmpl-'))
+    .forEach(k => {
+      templates[k.replace('deploy-tmpl-', '')] = mah[k]
+    })
+  return templates
 }
 
 const getMahConfig = function () {
@@ -279,5 +304,6 @@ module.exports = {
   getCurrentVersion,
   getAccessToken,
   getConfigDefaultBranch,
-  getConfigDeployTmpl
+  getConfigDeployTmpl,
+  getDeployTemplates
 }
